@@ -1,0 +1,16 @@
+# Example Tournament Arena
+hollow:
+  # The arena the tournament is held on
+  arena: hollow
+  # The allowed kits in the arena, the first kit will be the default kit
+  kits:
+  - '&2Kị Sĩ'
+  - '&bPhù thủy'
+  - '&6Cung thủ'
+  - '&bChúa tể rừng xanh'
+  # Can the players use the locked kits ?
+  use-locked-kit: true
+  # Is this tournament for all players ?
+  free-for-all: false
+  # Stop the tournament on game end ?
+  stop-on-game-end: true

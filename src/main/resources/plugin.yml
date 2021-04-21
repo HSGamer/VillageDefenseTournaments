@@ -1,0 +1,6 @@
+name: VillageDefenseTournaments
+version: ${project.version}
+main: me.hsgamer.villagedefensetournaments.VillageDefenseTournaments
+api-version: 1.16
+depend: [ VillageDefense ]
+authors: [ HSGamer ]
