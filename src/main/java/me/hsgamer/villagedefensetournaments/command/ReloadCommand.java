@@ -6,7 +6,6 @@ import me.hsgamer.villagedefensetournaments.VillageDefenseTournaments;
 import me.hsgamer.villagedefensetournaments.config.MessageConfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
@@ -21,7 +20,7 @@ public class ReloadCommand extends Command {
     }
 
     @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         if (!testPermission(sender)) {
             return false;
         }
