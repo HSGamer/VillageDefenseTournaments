@@ -38,6 +38,10 @@ public class TournamentArenaManager {
                     .map(String::valueOf)
                     .map(Boolean::parseBoolean)
                     .ifPresent(tournamentArena::setStopOnGameEnd);
+            Optional.ofNullable(value.get("allow-spectator"))
+                    .map(String::valueOf)
+                    .map(Boolean::parseBoolean)
+                    .ifPresent(tournamentArena::setAllowSpectator);
 
             addTournamentArena(key, tournamentArena);
         }
@@ -61,6 +65,10 @@ public class TournamentArenaManager {
 
     public Optional<TournamentArena> getTournamentArenaFromGameArena(String arenaId) {
         return map.values().parallelStream().filter(arena -> arena.getArena().equals(arenaId)).findFirst();
+    }
+
+    public Optional<TournamentArena> getEnabledTournamentArenaFromGameArena(String arenaId) {
+        return getTournamentArenaFromGameArena(arenaId).filter(TournamentArena::isEnabled);
     }
 
     public boolean checkTournamentArenaEnabled(String arenaId) {

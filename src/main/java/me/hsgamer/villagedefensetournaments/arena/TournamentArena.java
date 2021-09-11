@@ -2,19 +2,23 @@ package me.hsgamer.villagedefensetournaments.arena;
 
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import plugily.projects.villagedefense.kits.KitRegistry;
 import plugily.projects.villagedefense.kits.basekits.Kit;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TournamentArena {
     private final String arena;
     private final List<String> kits;
     private final List<UUID> uuids = new ArrayList<>();
+    private final AtomicReference<CommandSender> currentHost = new AtomicReference<>();
     private boolean enabled = false;
     private boolean useLockedKit = false;
     private boolean freeForAll = false;
     private boolean stopOnGameEnd = false;
+    private boolean allowSpectator = false;
 
     public TournamentArena(String arena, List<String> kits) {
         this.arena = arena;
@@ -92,5 +96,21 @@ public class TournamentArena {
 
     public void setStopOnGameEnd(boolean stopOnGameEnd) {
         this.stopOnGameEnd = stopOnGameEnd;
+    }
+
+    public CommandSender getCurrentHost() {
+        return currentHost.get();
+    }
+
+    public void setCurrentHost(CommandSender host) {
+        this.currentHost.set(host);
+    }
+
+    public boolean isAllowSpectator() {
+        return allowSpectator;
+    }
+
+    public void setAllowSpectator(boolean allowSpectator) {
+        this.allowSpectator = allowSpectator;
     }
 }

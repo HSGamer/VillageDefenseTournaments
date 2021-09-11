@@ -89,6 +89,7 @@ public class HostCommand extends Command {
                         arena.getPlayers().forEach(player -> ArenaManager.leaveAttempt(player, arena));
                     }
                 }
+                tournamentArena.setCurrentHost(sender);
                 tournamentArena.setEnabled(true);
                 MessageUtils.sendMessage(sender, MessageConfig.SUCCESS.getValue());
                 break;
