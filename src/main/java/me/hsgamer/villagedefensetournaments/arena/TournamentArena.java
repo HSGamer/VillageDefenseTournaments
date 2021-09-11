@@ -19,6 +19,7 @@ public class TournamentArena {
     private boolean freeForAll = false;
     private boolean stopOnGameEnd = false;
     private boolean allowSpectator = false;
+    private boolean allowRespawn = true;
 
     public TournamentArena(String arena, List<String> kits) {
         this.arena = arena;
@@ -112,5 +113,13 @@ public class TournamentArena {
 
     public void setAllowSpectator(boolean allowSpectator) {
         this.allowSpectator = allowSpectator;
+    }
+
+    public boolean isAllowRespawn() {
+        return allowRespawn;
+    }
+
+    public void setAllowRespawn(boolean allowRespawn) {
+        this.allowRespawn = allowRespawn;
     }
 }

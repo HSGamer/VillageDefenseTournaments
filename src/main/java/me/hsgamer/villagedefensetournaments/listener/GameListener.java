@@ -105,7 +105,10 @@ public class GameListener implements Listener {
         }
         TournamentArena tournamentArena = optionalTournamentArena.get();
 
-        if (!tournamentArena.isFreeForAll() && !tournamentArena.getUuids().contains(player.getUniqueId())) {
+        if (
+                (!tournamentArena.isFreeForAll() && !tournamentArena.getUuids().contains(player.getUniqueId()))
+                        || !tournamentArena.isAllowRespawn()
+        ) {
             event.setCancelled(true);
         }
     }

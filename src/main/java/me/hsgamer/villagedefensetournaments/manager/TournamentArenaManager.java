@@ -42,6 +42,10 @@ public class TournamentArenaManager {
                     .map(String::valueOf)
                     .map(Boolean::parseBoolean)
                     .ifPresent(tournamentArena::setAllowSpectator);
+            Optional.ofNullable(value.get("allow-respawn"))
+                    .map(String::valueOf)
+                    .map(Boolean::parseBoolean)
+                    .ifPresent(tournamentArena::setAllowRespawn);
 
             addTournamentArena(key, tournamentArena);
         }
