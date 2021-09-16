@@ -46,6 +46,10 @@ public class TournamentArenaManager {
                     .map(String::valueOf)
                     .map(Boolean::parseBoolean)
                     .ifPresent(tournamentArena::setAllowRespawn);
+            Optional.ofNullable(value.get("end-wave"))
+                    .map(String::valueOf)
+                    .map(Integer::parseInt)
+                    .ifPresent(tournamentArena::setEndWave);
 
             addTournamentArena(key, tournamentArena);
         }

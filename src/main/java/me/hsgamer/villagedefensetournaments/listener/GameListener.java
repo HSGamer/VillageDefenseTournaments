@@ -13,7 +13,9 @@ import plugily.projects.villagedefense.api.event.game.VillageGameStartEvent;
 import plugily.projects.villagedefense.api.event.game.VillageGameStopEvent;
 import plugily.projects.villagedefense.api.event.player.VillagePlayerChooseKitEvent;
 import plugily.projects.villagedefense.api.event.player.VillagePlayerRespawnEvent;
+import plugily.projects.villagedefense.api.event.wave.VillageWaveEndEvent;
 import plugily.projects.villagedefense.arena.Arena;
+import plugily.projects.villagedefense.arena.ArenaManager;
 import plugily.projects.villagedefense.arena.ArenaState;
 import plugily.projects.villagedefense.handlers.language.Messages;
 import plugily.projects.villagedefense.kits.basekits.Kit;
@@ -144,5 +146,24 @@ public class GameListener implements Listener {
                 .getEnabledTournamentArenaFromGameArena(event.getArena().getId())
                 .filter(TournamentArena::isStopOnGameEnd)
                 .ifPresent(tournamentArena -> tournamentArena.setEnabled(false));
+    }
+
+    @EventHandler
+    public void onEndWave(VillageWaveEndEvent event) {
+        Arena arena = event.getArena();
+        Optional<TournamentArena> optionalTournamentArena = instance.getTournamentArenaManager().getEnabledTournamentArenaFromGameArena(arena.getId());
+        if (!optionalTournamentArena.isPresent()) {
+            return;
+        }
+        TournamentArena tournamentArena = optionalTournamentArena.get();
+
+        int endWave = tournamentArena.getEndWave();
+        if (endWave <= 0) {
+            return;
+        }
+
+        if (arena.getWave() + 1 >= endWave) {
+            ArenaManager.stopGame(false, arena);
+        }
     }
 }

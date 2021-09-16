@@ -14,6 +14,7 @@ public class TournamentArena {
     private final List<String> kits;
     private final List<UUID> uuids = new ArrayList<>();
     private final AtomicReference<CommandSender> currentHost = new AtomicReference<>();
+    private int endWave = 0;
     private boolean enabled = false;
     private boolean useLockedKit = false;
     private boolean freeForAll = false;
@@ -121,5 +122,13 @@ public class TournamentArena {
 
     public void setAllowRespawn(boolean allowRespawn) {
         this.allowRespawn = allowRespawn;
+    }
+
+    public int getEndWave() {
+        return endWave;
+    }
+
+    public void setEndWave(int endWave) {
+        this.endWave = endWave;
     }
 }
