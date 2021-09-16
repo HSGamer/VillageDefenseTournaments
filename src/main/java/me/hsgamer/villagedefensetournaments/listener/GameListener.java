@@ -162,8 +162,8 @@ public class GameListener implements Listener {
             return;
         }
 
-        if (arena.getWave() + 1 >= endWave) {
-            ArenaManager.stopGame(false, arena);
+        if (arena.getWave() >= endWave) {
+            Bukkit.getScheduler().runTask(instance, () -> ArenaManager.stopGame(false, arena));
         }
     }
 }
