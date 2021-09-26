@@ -1,6 +1,6 @@
 package me.hsgamer.villagedefensetournaments.arena;
 
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.villagedefensetournaments.kitcondition.KitCondition;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import plugily.projects.villagedefense.kits.KitRegistry;
@@ -8,10 +8,11 @@ import plugily.projects.villagedefense.kits.basekits.Kit;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class TournamentArena {
     private final String arena;
-    private final List<String> kits;
+    private final List<KitCondition> kitConditions;
     private final List<UUID> uuids = new ArrayList<>();
     private final AtomicReference<CommandSender> currentHost = new AtomicReference<>();
     private int endWave = 0;
@@ -22,9 +23,9 @@ public class TournamentArena {
     private boolean allowSpectator = false;
     private boolean allowRespawn = true;
 
-    public TournamentArena(String arena, List<String> kits) {
+    public TournamentArena(String arena, List<KitCondition> kitConditions) {
         this.arena = arena;
-        this.kits = kits;
+        this.kitConditions = kitConditions;
     }
 
     public String getArena() {
@@ -32,24 +33,32 @@ public class TournamentArena {
     }
 
     public Optional<Kit> parseDefaultKit() {
+        if (kitConditions.isEmpty()) {
+            return Optional.empty();
+        }
+        List<Kit> kits = getKits();
         if (kits.isEmpty()) {
             return Optional.empty();
         }
-        String colored = MessageUtils.colorize(kits.get(0));
-        return KitRegistry.getKits().parallelStream().filter(kit -> colored.equalsIgnoreCase(kit.getName())).findFirst();
+        return Optional.of(kits.get(0));
     }
 
-    public List<String> getKits() {
-        return kits;
+    public List<Kit> getKits() {
+        return KitRegistry.getKits().parallelStream().filter(this::isKitAllowed).collect(Collectors.toList());
     }
 
     public boolean isKitAllowed(Kit kit) {
-        if (kits.isEmpty()) {
+        if (kitConditions.isEmpty()) {
             return true;
         }
-        List<String> colored = new ArrayList<>(kits);
-        colored.replaceAll(MessageUtils::colorize);
-        return colored.parallelStream().anyMatch(s -> kit.getName().equalsIgnoreCase(s));
+        boolean allowed = false;
+        for (KitCondition kitCondition : kitConditions) {
+            if (kitCondition.isKitAllowed(kit)) {
+                allowed = true;
+                break;
+            }
+        }
+        return allowed;
     }
 
     public List<UUID> getUuids() {

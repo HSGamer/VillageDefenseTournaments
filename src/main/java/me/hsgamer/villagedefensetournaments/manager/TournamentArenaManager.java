@@ -3,7 +3,9 @@ package me.hsgamer.villagedefensetournaments.manager;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.villagedefensetournaments.VillageDefenseTournaments;
 import me.hsgamer.villagedefensetournaments.arena.TournamentArena;
+import me.hsgamer.villagedefensetournaments.builder.KitConditionBuilder;
 import me.hsgamer.villagedefensetournaments.config.ArenaConfig;
+import me.hsgamer.villagedefensetournaments.kitcondition.KitCondition;
 
 import java.util.*;
 
@@ -23,9 +25,12 @@ public class TournamentArenaManager {
                 continue;
             }
             String arena = String.valueOf(value.get("arena"));
-            List<String> kits = Optional.ofNullable(value.get("kits")).map(o -> CollectionUtils.createStringListFromObject(o, true)).orElse(Collections.emptyList());
+            List<KitCondition> kitConditions = Optional.ofNullable(value.get("kits"))
+                    .map(o -> CollectionUtils.createStringListFromObject(o, true))
+                    .map(KitConditionBuilder.INSTANCE::getKitConditions)
+                    .orElse(Collections.emptyList());
 
-            TournamentArena tournamentArena = new TournamentArena(arena, kits);
+            TournamentArena tournamentArena = new TournamentArena(arena, kitConditions);
             Optional.ofNullable(value.get("use-locked-kit"))
                     .map(String::valueOf)
                     .map(Boolean::parseBoolean)

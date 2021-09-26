@@ -53,10 +53,10 @@ public class GameListener implements Listener {
             }
         }
         MessageUtils.sendMessage(user.getPlayer(), MessageConfig.TOURNAMENT_ARENA_JOINED.getValue());
-        List<String> kits = tournamentArena.getKits();
+        List<Kit> kits = tournamentArena.getKits();
         if (!kits.isEmpty()) {
             MessageUtils.sendMessage(user.getPlayer(), MessageConfig.TOURNAMENT_ARENA_ALLOWED_KITS.getValue());
-            kits.forEach(kit -> MessageUtils.sendMessage(user.getPlayer(), "&7- &f" + kit));
+            kits.forEach(kit -> MessageUtils.sendMessage(user.getPlayer(), "&7- &f" + kit.getName()));
 
             if (arena.getArenaState() != ArenaState.IN_GAME || !tournamentArena.isKitAllowed(user.getKit())) {
                 tournamentArena.parseDefaultKit().ifPresent(user::setKit);
