@@ -74,6 +74,9 @@ public class TournamentArena {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        if (!this.enabled) {
+            clearAllUuids();
+        }
     }
 
     public boolean isUseLockedKit() {
