@@ -69,6 +69,7 @@ public class TournamentArenaManager {
     }
 
     public void clearAll() {
+        map.values().forEach(tournamentArena -> tournamentArena.setEnabled(false));
         map.clear();
     }
 
