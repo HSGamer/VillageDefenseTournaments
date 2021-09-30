@@ -9,12 +9,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import plugily.projects.villagedefense.arena.Arena;
 import plugily.projects.villagedefense.arena.ArenaManager;
 import plugily.projects.villagedefense.arena.ArenaRegistry;
 import plugily.projects.villagedefense.arena.ArenaState;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HostCommand extends Command {
     private static final String ADD_PLAYER = "addplayer";
@@ -116,17 +118,21 @@ public class HostCommand extends Command {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        if (!testPermissionSilent(sender)) {
-            return Collections.emptyList();
-        }
         if (args.length == 1) {
             return Arrays.asList(ADD_PLAYER, CLEAR_PLAYERS, START, END);
         }
         if (args.length == 2 && Arrays.asList(ADD_PLAYER, CLEAR_PLAYERS, START, END).contains(args[0])) {
-            return new ArrayList<>(instance.getTournamentArenaManager().getAllNames());
+            String arena = args[1];
+            return instance.getTournamentArenaManager().getAllNames().stream()
+                    .filter(name -> arena.isEmpty() || name.startsWith(arena))
+                    .collect(Collectors.toList());
         }
         if (args.length == 3 && ADD_PLAYER.equalsIgnoreCase(args[0])) {
-            return super.tabComplete(sender, alias, args);
+            String name = args[2];
+            return Bukkit.getOnlinePlayers().stream()
+                    .map(HumanEntity::getName)
+                    .filter(player -> name.isEmpty() || player.startsWith(name))
+                    .collect(Collectors.toList());
         }
         return Collections.emptyList();
     }
