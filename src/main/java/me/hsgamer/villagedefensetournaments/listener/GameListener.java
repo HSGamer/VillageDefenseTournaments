@@ -46,8 +46,8 @@ public class GameListener implements Listener {
         if (!tournamentArena.isFreeForAll()) {
             if (
                     tournamentArena.isAllowSpectator()
-                    || user.getPlayer().equals(tournamentArena.getCurrentHost())
-                    || tournamentArena.getSpectators().contains(user.getUniqueId())
+                            || user.getPlayer().equals(tournamentArena.getCurrentHost())
+                            || tournamentArena.getSpectators().contains(user.getUniqueId())
             ) {
                 user.isPermanentSpectator();
             } else if (!tournamentArena.getPlayers().contains(user.getUniqueId())) {
