@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 public class TournamentArena {
     private final String arena;
     private final List<KitCondition> kitConditions;
-    private final List<UUID> uuids = new ArrayList<>();
+    private final List<UUID> players = new ArrayList<>();
+    private final List<UUID> spectators = new ArrayList<>();
     private final AtomicReference<CommandSender> currentHost = new AtomicReference<>();
     private int endWave = 0;
     private boolean enabled = false;
@@ -61,20 +62,33 @@ public class TournamentArena {
         return allowed;
     }
 
-    public List<UUID> getUuids() {
-        return Collections.unmodifiableList(uuids);
+    public List<UUID> getPlayers() {
+        return Collections.unmodifiableList(players);
     }
 
-    public void addUUID(UUID uuid) {
-        uuids.add(uuid);
+    public List<UUID> getSpectators() {
+        return spectators;
+    }
+
+    public void addPlayer(UUID uuid) {
+        players.add(uuid);
     }
 
     public void addPlayer(OfflinePlayer player) {
-        addUUID(player.getUniqueId());
+        addPlayer(player.getUniqueId());
+    }
+
+    public void addSpectator(UUID uuid) {
+        spectators.add(uuid);
+    }
+
+    public void addSpectator(OfflinePlayer player) {
+        addSpectator(player.getUniqueId());
     }
 
     public void clearAllUuids() {
-        uuids.clear();
+        players.clear();
+        spectators.clear();
     }
 
     public boolean isEnabled() {

@@ -44,9 +44,13 @@ public class GameListener implements Listener {
         TournamentArena tournamentArena = optionalTournamentArena.get();
 
         if (!tournamentArena.isFreeForAll()) {
-            if (tournamentArena.isAllowSpectator() || user.getPlayer().equals(tournamentArena.getCurrentHost())) {
+            if (
+                    tournamentArena.isAllowSpectator()
+                    || user.getPlayer().equals(tournamentArena.getCurrentHost())
+                    || tournamentArena.getSpectators().contains(user.getUniqueId())
+            ) {
                 user.isPermanentSpectator();
-            } else if (!tournamentArena.getUuids().contains(user.getUniqueId())) {
+            } else if (!tournamentArena.getPlayers().contains(user.getUniqueId())) {
                 MessageUtils.sendMessage(user.getPlayer(), MessageConfig.CANNOT_JOIN_TOURNAMENT_ARENA.getValue());
                 event.setCancelled(true);
                 return;
@@ -80,7 +84,7 @@ public class GameListener implements Listener {
         }
         List<Player> spectators = new ArrayList<>();
         for (Player player : arena.getPlayers()) {
-            if (tournamentArena.isFreeForAll() || tournamentArena.getUuids().contains(player.getUniqueId())) {
+            if (tournamentArena.isFreeForAll() || tournamentArena.getPlayers().contains(player.getUniqueId())) {
                 User user = instance.getParentPlugin().getUserManager().getUser(player);
                 if (!tournamentArena.isKitAllowed(user.getKit())) {
                     user.setKit(optional.get());
@@ -108,7 +112,7 @@ public class GameListener implements Listener {
         TournamentArena tournamentArena = optionalTournamentArena.get();
 
         if (
-                (!tournamentArena.isFreeForAll() && !tournamentArena.getUuids().contains(player.getUniqueId()))
+                (!tournamentArena.isFreeForAll() && !tournamentArena.getPlayers().contains(player.getUniqueId()))
                         || !tournamentArena.isAllowRespawn()
         ) {
             event.setCancelled(true);

@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 public class HostCommand extends Command {
     private static final String ADD_PLAYER = "addplayer";
+    private static final String ADD_SPECTATOR = "addspectator";
     private static final String CLEAR_PLAYERS = "clearplayers";
     private static final String START = "start";
     private static final String END = "end";
@@ -42,6 +43,7 @@ public class HostCommand extends Command {
 
         if (args.length < 2) {
             MessageUtils.sendMessage(sender, "&b/" + commandLabel + " addplayer <arena> <player>");
+            MessageUtils.sendMessage(sender, "&b/" + commandLabel + " addspectator <arena> <player>");
             MessageUtils.sendMessage(sender, "&b/" + commandLabel + " clearplayers <arena>");
             MessageUtils.sendMessage(sender, "&b/" + commandLabel + " start <arena>");
             MessageUtils.sendMessage(sender, "&b/" + commandLabel + " end <arena>");
@@ -64,6 +66,17 @@ public class HostCommand extends Command {
                 // noinspection deprecation
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
                 tournamentArena.addPlayer(offlinePlayer);
+                MessageUtils.sendMessage(sender, MessageConfig.SUCCESS.getValue());
+                break;
+            }
+            case ADD_SPECTATOR:{
+                if (args.length < 3) {
+                    MessageUtils.sendMessage(sender, "&b/" + commandLabel + " addplayer <arena> <player>");
+                    break;
+                }
+                // noinspection deprecation
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
+                tournamentArena.addSpectator(offlinePlayer);
                 MessageUtils.sendMessage(sender, MessageConfig.SUCCESS.getValue());
                 break;
             }
@@ -107,6 +120,7 @@ public class HostCommand extends Command {
             }
             default: {
                 MessageUtils.sendMessage(sender, "&b/" + commandLabel + " addplayer <arena> <player>");
+                MessageUtils.sendMessage(sender, "&b/" + commandLabel + " addspectator <arena> <player>");
                 MessageUtils.sendMessage(sender, "&b/" + commandLabel + " clearplayers <arena>");
                 MessageUtils.sendMessage(sender, "&b/" + commandLabel + " start <arena>");
                 MessageUtils.sendMessage(sender, "&b/" + commandLabel + " end <arena>");
@@ -119,15 +133,15 @@ public class HostCommand extends Command {
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         if (args.length == 1) {
-            return Arrays.asList(ADD_PLAYER, CLEAR_PLAYERS, START, END);
+            return Arrays.asList(ADD_PLAYER, ADD_SPECTATOR, CLEAR_PLAYERS, START, END);
         }
-        if (args.length == 2 && Arrays.asList(ADD_PLAYER, CLEAR_PLAYERS, START, END).contains(args[0])) {
+        if (args.length == 2 && Arrays.asList(ADD_PLAYER, ADD_SPECTATOR, CLEAR_PLAYERS, START, END).contains(args[0])) {
             String arena = args[1];
             return instance.getTournamentArenaManager().getAllNames().stream()
                     .filter(name -> arena.isEmpty() || name.startsWith(arena))
                     .collect(Collectors.toList());
         }
-        if (args.length == 3 && ADD_PLAYER.equalsIgnoreCase(args[0])) {
+        if (args.length == 3 && Arrays.asList(ADD_PLAYER, ADD_SPECTATOR).contains(args[0])) {
             String name = args[2];
             return Bukkit.getOnlinePlayers().stream()
                     .map(HumanEntity::getName)
