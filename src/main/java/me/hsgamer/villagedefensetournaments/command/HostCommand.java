@@ -96,13 +96,10 @@ public class HostCommand extends Command {
                 }
                 Arena arena = ArenaRegistry.getArena(tournamentArena.getArena());
                 if (arena != null) {
-                    if (arena.getArenaState() == ArenaState.IN_GAME) {
+                    if (arena.getArenaState() != ArenaState.ENDING && arena.getArenaState() != ArenaState.RESTARTING) {
                         ArenaManager.stopGame(false, arena);
-                        arena.getPlayers().forEach(player -> MessageUtils.sendMessage(player, MessageConfig.TOURNAMENT_ARENA_INGAME_BROADCAST.getValue()));
-                    } else if (arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
-                        arena.getPlayers().forEach(player -> MessageUtils.sendMessage(player, MessageConfig.TOURNAMENT_ARENA_INGAME_BROADCAST.getValue()));
-                        arena.getPlayers().forEach(player -> ArenaManager.leaveAttempt(player, arena));
                     }
+                    arena.getPlayers().forEach(player -> MessageUtils.sendMessage(player, MessageConfig.TOURNAMENT_ARENA_INGAME_BROADCAST.getValue()));
                 }
                 tournamentArena.setCurrentHost(sender);
                 tournamentArena.setEnabled(true);
